@@ -8,6 +8,8 @@
 | **Assignment** | Assignment 4 |
 | **Repository** | [Two-Body-Problem-Simulator](https://github.com/ramibhavya29-dot/Two-Body-Problem-Simulator) |
 
+> **Live Simulator:** [Open the Interactive Two-Body Problem Simulator](https://ramibhavya29-dot.github.io/Two-Body-Problem-Simulator/)
+
 ## Contents
 
 - [Project Overview](#project-overview)
@@ -28,6 +30,7 @@
 - [Known Limitations](#known-limitations)
 - [Troubleshooting](#troubleshooting)
 - [GitHub Repository](#github-repository)
+- [Live Simulator](#live-simulator)
 
 ---
 
@@ -357,4 +360,8 @@ git clone https://github.com/ramibhavya29-dot/Two-Body-Problem-Simulator.git
 cd Two-Body-Problem-Simulator
 ```
 
-The cloned repository is ready to run using the VS Code Live Server instructions above. A live hosted simulator URL is not currently configured. If desired, GitHub Pages can be enabled from repository **Settings → Pages**, selecting the `main` branch and repository root.
+The cloned repository is ready to run using the VS Code Live Server instructions above.
+
+## Live Simulator
+
+The public GitHub Pages deployment is available at [https://ramibhavya29-dot.github.io/Two-Body-Problem-Simulator/](https://ramibhavya29-dot.github.io/Two-Body-Problem-Simulator/).
