@@ -8,13 +8,12 @@
 
 ## Group Member Information
 
-- **Member 1:** [Name]
-- **Member 1 ID:** [Student ID]
-- **Member 2:** [Name]
-- **Member 2 ID:** [Student ID]
-- **Member 3:** [Name]
-- **Member 3 ID:** [Student ID]
-
+- **Member 1:** Bhavya Rami
+- **Member 1 ID:** 25110265
+- **Member 2:** Tandel Smit
+- **Member 2 ID:** 25110317
+- **Member 3:** Rathod Prabhas
+- **Member 3 ID:** 25110266
 ## Submitted Materials
 
 This submission contains a browser-based interactive two-body gravitational simulator as supplementary material for ME206 Assignment 4.
