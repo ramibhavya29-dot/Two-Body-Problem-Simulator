@@ -45,61 +45,53 @@ The primary educational objectives are to demonstrate:
 - Conservation of total mechanical energy and angular momentum.
 - The relationship among eccentricity, orbital period, position, velocity, and trajectory classification.
 
-The application uses SI units for calculations and presents astronomical distances in astronomical units (AU), velocities in km/s, times in days or years, energy in joules, and angular momentum in $\mathrm{kg\,m^2/s}$.
+The application uses SI units for calculations and presents astronomical distances in astronomical units (AU), velocities in km/s, times in days or years, energy in joules, and angular momentum in kg·m²/s.
 
 ## Physical Model
 
 ### Newton's Law of Universal Gravitation
 
-For masses $m_1$ and $m_2$ separated by position vector
+For masses `m₁` and `m₂`, let `r⃗₁` and `r⃗₂` be their position vectors. The separation vector from body 1 to body 2 is:
 
-$$
-\mathbf r = \mathbf r_2-\mathbf r_1,
-$$
+```text
+r⃗ = r⃗₂ − r⃗₁
+```
 
-the gravitational force magnitude is
+The gravitational force magnitude is:
 
-$$
-F=\frac{Gm_1m_2}{|\mathbf r|^2},
-$$
+```text
+F = G m₁ m₂ / |r⃗|²
+```
 
-where $G=6.67430\times10^{-11}\,\mathrm{m^3\,kg^{-1}\,s^{-2}}$.
+where `G = 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²`.
 
 ### Equations of Motion
 
 The implementation uses the following pairwise accelerations:
 
-$$
-\mathbf a_1
-=
-Gm_2\frac{\mathbf r_2-\mathbf r_1}{|\mathbf r_2-\mathbf r_1|^3},
-$$
+```text
+a⃗₁ = G m₂ (r⃗₂ − r⃗₁) / |r⃗₂ − r⃗₁|³
+```
 
-$$
-\mathbf a_2
-=
-Gm_1\frac{\mathbf r_1-\mathbf r_2}{|\mathbf r_1-\mathbf r_2|^3}.
-$$
+```text
+a⃗₂ = G m₁ (r⃗₁ − r⃗₂) / |r⃗₁ − r⃗₂|³
+```
 
 These expressions produce equal and opposite forces while allowing both bodies to move. There is no artificial position constraint on either body.
 
 ### Center of Mass
 
-The center-of-mass position is
+The center-of-mass position is:
 
-$$
-\mathbf R_{\mathrm{COM}}
-=
-\frac{m_1\mathbf r_1+m_2\mathbf r_2}{m_1+m_2}.
-$$
+```text
+R⃗COM = (m₁ r⃗₁ + m₂ r⃗₂) / (m₁ + m₂)
+```
 
-Its velocity is
+Its velocity is:
 
-$$
-\mathbf V_{\mathrm{COM}}
-=
-\frac{m_1\mathbf v_1+m_2\mathbf v_2}{m_1+m_2}.
-$$
+```text
+V⃗COM = (m₁ v⃗₁ + m₂ v⃗₂) / (m₁ + m₂)
+```
 
 If the initial total momentum is nonzero, the center of mass can drift at constant velocity. The **Zero center-of-mass velocity** option subtracts the mass-weighted average velocity from both bodies. This changes neither the relative position nor the relative velocity and preserves the relative orbit.
 
@@ -107,22 +99,13 @@ If the initial total momentum is nonzero, the center of mass can drift at consta
 
 The simulator uses a fixed-step velocity Verlet integrator:
 
-$$
-\mathbf r(t+\Delta t)
-=
-\mathbf r(t)+\mathbf v(t)\Delta t+
-\frac{1}{2}\mathbf a(t)\Delta t^2,
-$$
+```text
+r⃗ᵢ(t + Δt) = r⃗ᵢ(t) + v⃗ᵢ(t) Δt + ½ a⃗ᵢ(t) Δt²
+```
 
-$$
-\mathbf v(t+\Delta t)
-=
-\mathbf v(t)+
-\frac{1}{2}
-\left[
-\mathbf a(t)+\mathbf a(t+\Delta t)
-\right]\Delta t.
-$$
+```text
+v⃗ᵢ(t + Δt) = v⃗ᵢ(t) + ½ [a⃗ᵢ(t) + a⃗ᵢ(t + Δt)] Δt
+```
 
 The physics time step is independent of the requested simulated-time rate. The default step is 0.1 simulated day and is adjustable from 0.005 to 1 day. Display animation uses `requestAnimationFrame`, while an accumulator supplies fixed-size physics substeps.
 
@@ -130,64 +113,51 @@ At high simulation speeds, physics work is bounded per animation frame. If the r
 
 ## Mechanical Quantities
 
-For body masses $m_i$, velocities $\mathbf v_i$, and separation $r$, the displayed total mechanical energy is
+For body masses `m₁` and `m₂`, velocities `v⃗₁` and `v⃗₂`, and separation `r`, the displayed total mechanical energy is:
 
-$$
-E
-=
-\frac12m_1|\mathbf v_1|^2+
-\frac12m_2|\mathbf v_2|^2-
-\frac{Gm_1m_2}{r}.
-$$
+```text
+E = ½ m₁ |v⃗₁|² + ½ m₂ |v⃗₂|² − G m₁ m₂ / r
+```
 
-The relative angular momentum calculation is
+The relative angular momentum magnitude is:
 
-$$
-L_\mathrm{rel}=\mu |\mathbf r\times\mathbf v_\mathrm{rel}|,
-$$
+```text
+Lrel = μ |r⃗ × v⃗rel|
+```
 
-where
+where the reduced mass `μ` is:
 
-$$
-\mu=\frac{m_1m_2}{m_1+m_2}.
-$$
+```text
+μ = m₁ m₂ / (m₁ + m₂)
+```
 
-The live relative energy error is
+The live relative energy error is:
 
-$$
-\epsilon_E=
-\frac{|E-E_0|}{|E_0|}\times100\%,
-$$
+```text
+Energy error = |E − E₀| / |E₀| × 100%
+```
 
-and the relative angular momentum error uses the same convention with $L_{\mathrm{rel}}$ and $L_{\mathrm{rel},0}$.
+The relative angular momentum error uses the same convention with `Lrel` and its initial value `Lrel₀`.
 
-For the two-body relative orbit, eccentricity is derived from the specific orbital energy
+For the two-body relative orbit, eccentricity is derived from the specific orbital energy:
 
-$$
-\epsilon_\mathrm{rel}
-=
-\frac{|\mathbf v_\mathrm{rel}|^2}{2}
--\frac{G(m_1+m_2)}{r}
-$$
+```text
+εrel = ½ |v⃗rel|² − G (m₁ + m₂) / r
+```
 
-and the specific relative angular momentum $h=r_xv_{y,\mathrm{rel}}-r_yv_{x,\mathrm{rel}}$:
+and the specific relative angular momentum `h`:
 
-$$
-e=
-\sqrt{
-1+
-\frac{2\epsilon_\mathrm{rel}h^2}
-[G(m_1+m_2)]^2
-}.
-$$
+```text
+h = rₓ vᵧ,rel − rᵧ vₓ,rel
+e = √(1 + 2 εrel h² / [G (m₁ + m₂)]²)
+```
 
-For bound trajectories, $\epsilon_\mathrm{rel}<0$, and the orbital period is calculated from the relative semimajor axis:
+For bound trajectories, `εrel < 0`. The orbital period is calculated from the relative semimajor axis:
 
-$$
-a=-\frac{G(m_1+m_2)}{2\epsilon_\mathrm{rel}},
-\qquad
-T=2\pi\sqrt{\frac{a^3}{G(m_1+m_2)}}.
-$$
+```text
+a = −G (m₁ + m₂) / (2 εrel)
+T = 2π √[a³ / G (m₁ + m₂)]
+```
 
 ## Main Features
 
