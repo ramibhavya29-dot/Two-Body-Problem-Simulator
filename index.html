@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d18">
+  <title>Orbit Lab — Two-Body Gravity Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Orbit Lab home">
+        <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+        <span><strong>ORBIT<span>LAB</span></strong><small>NEWTONIAN GRAVITY SIMULATOR</small></span>
+      </a>
+      <div class="topbar-right">
+        <span class="live-badge"><i></i> TWO-BODY MODEL</span>
+        <button class="button button-quiet presentation-button" id="presentation-button" type="button" aria-pressed="false">
+          <span aria-hidden="true">⛶</span> Presentation mode
+        </button>
+      </div>
+    </header>
+
+    <div class="app-shell">
+      <aside class="control-panel" id="control-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">MISSION SETUP</span><h1>Configure orbit</h1></div>
+          <span class="step-number">01</span>
+        </div>
+
+        <section class="control-section">
+          <label class="section-label" for="preset-select">STARTING SCENARIO</label>
+          <div class="select-wrap">
+            <select id="preset-select" aria-label="Starting scenario">
+              <option value="binary">Equal-mass binary stars</option>
+              <option value="ideal-binary">Ideal circular equal-mass binary</option>
+              <option value="sun-earth">Sun — Earth</option>
+              <option value="earth-moon">Earth — Moon</option>
+              <option value="elliptical">Elliptical orbit</option>
+              <option value="circular">Near-circular orbit</option>
+              <option value="hyperbolic">Escape trajectory</option>
+            </select>
+            <span class="select-chevron" aria-hidden="true">⌄</span>
+          </div>
+          <p class="helper-text" id="preset-description">Two equal stars orbit their shared center of mass.</p>
+        </section>
+
+        <section class="control-section">
+          <div class="section-title-row"><span class="section-label">BODY PARAMETERS</span><span class="unit-tag">EARTH MASSES · AU · KM/S</span></div>
+          <div class="body-form body-one">
+            <div class="body-name"><i class="body-dot"></i><span id="body1-name">Body 1</span></div>
+            <label class="field-label" for="mass1">Mass <span>(M⊕)</span></label>
+            <input id="mass1" class="number-input" type="number" min="0.000001" step="any" inputmode="decimal">
+            <div class="vector-fields">
+              <label class="field-label">Position <span>(AU)</span></label>
+              <input id="x1" class="number-input" type="number" step="any" aria-label="Body 1 x position in AU">
+              <input id="y1" class="number-input" type="number" step="any" aria-label="Body 1 y position in AU">
+              <label class="field-label">Velocity <span>(km/s)</span></label>
+              <input id="vx1" class="number-input" type="number" step="any" aria-label="Body 1 x velocity in kilometers per second">
+              <input id="vy1" class="number-input" type="number" step="any" aria-label="Body 1 y velocity in kilometers per second">
+            </div>
+          </div>
+          <div class="body-form body-two">
+            <div class="body-name"><i class="body-dot"></i><span id="body2-name">Body 2</span></div>
+            <label class="field-label" for="mass2">Mass <span>(M⊕)</span></label>
+            <input id="mass2" class="number-input" type="number" min="0.000001" step="any" inputmode="decimal">
+            <div class="vector-fields">
+              <label class="field-label">Position <span>(AU)</span></label>
+              <input id="x2" class="number-input" type="number" step="any" aria-label="Body 2 x position in AU">
+              <input id="y2" class="number-input" type="number" step="any" aria-label="Body 2 y position in AU">
+              <label class="field-label">Velocity <span>(km/s)</span></label>
+              <input id="vx2" class="number-input" type="number" step="any" aria-label="Body 2 x velocity in kilometers per second">
+              <input id="vy2" class="number-input" type="number" step="any" aria-label="Body 2 y velocity in kilometers per second">
+            </div>
+          </div>
+          <label class="field-label separation-label" for="separation">Initial separation <span>(AU)</span></label>
+          <input id="separation" class="number-input" type="number" min="0.000001" step="any" inputmode="decimal" aria-label="Initial center-to-center separation in astronomical units">
+          <button class="button button-apply" id="apply-button" type="button">Apply parameters <span aria-hidden="true">↗</span></button>
+          <label class="toggle zero-com-toggle">
+            <input id="zero-com-velocity" type="checkbox">
+            <span class="toggle-ui"></span>
+            <span>Zero center-of-mass velocity</span>
+          </label>
+          <p class="helper-text zero-com-help">Subtracts the initial mass-weighted velocity from both bodies; relative velocity is unchanged.</p>
+        </section>
+
+        <section class="control-section">
+          <div class="section-title-row"><span class="section-label">INTEGRATION</span><span class="unit-tag">FIXED PHYSICS STEP</span></div>
+          <div class="range-control">
+            <div class="range-heading"><label for="timestep">Time step</label><output id="timestep-value">0.100 d</output></div>
+            <input id="timestep" type="range" min="0.005" max="1" step="0.005" value="0.1">
+            <div class="range-limits"><span>0.005 d</span><span>1 d</span></div>
+          </div>
+          <div class="range-control speed-control">
+            <div class="range-heading"><label for="speed-preset">Speed preset</label><output id="sim-speed-value">100 d/s</output></div>
+            <select id="speed-preset" class="speed-select" aria-label="Named simulation speed preset">
+              <option value="10">Normal · 10 days/sec</option>
+              <option value="100" selected>Fast · 100 days/sec</option>
+              <option value="365">Very Fast · 365 days/sec</option>
+              <option value="1000">Extreme · 1000 days/sec</option>
+              <option value="3000">Ultra · 3000 days/sec</option>
+              <option value="10000">Maximum · 10000 days/sec</option>
+              <option value="custom">Custom speed</option>
+            </select>
+            <div class="range-heading speed-range-heading"><label for="sim-speed">Speed options</label></div>
+            <input id="sim-speed" type="range" min="0" max="7" step="1" value="3" title="Choose 1, 10, 30, 100, 365, 1000, 3000, or 10000 simulated days per second">
+            <div class="speed-rungs" aria-hidden="true"><span>1</span><span>10</span><span>30</span><span>100</span><span>365</span><span>1k</span><span>3k</span><span>10k</span></div>
+            <label class="field-label custom-speed-label" for="speed-custom">Custom speed <span>(1–10,000 d/s)</span></label>
+            <input id="speed-custom" class="number-input" type="number" min="1" max="10000" step="any" value="100" inputmode="decimal" aria-label="Custom simulation speed in days per second">
+            <label class="toggle cinematic-control"><input id="toggle-cinematic" type="checkbox"><span class="toggle-ui"></span><span>Cinematic orbit <em>365 d/s</em></span></label>
+          </div>
+        </section>
+
+        <section class="control-section playback-section">
+          <div class="playback-buttons">
+            <button class="button button-play" id="play-button" type="button"><span id="play-icon" aria-hidden="true">Ⅱ</span><span id="play-label">Pause</span></button>
+            <button class="button button-secondary" id="restart-button" type="button" title="Restart with current parameters">↺ <span>Restart</span></button>
+            <button class="button button-icon" id="reset-button" type="button" title="Restore selected preset">⟲</button>
+          </div>
+          <div class="view-controls">
+            <span class="section-label">DISPLAY</span>
+            <div class="toggle-grid">
+              <label class="toggle"><input id="toggle-trails" type="checkbox" checked><span class="toggle-ui"></span><span>Orbit trails</span></label>
+              <label class="toggle"><input id="toggle-velocity" type="checkbox"><span class="toggle-ui"></span><span>Velocity vectors</span></label>
+              <label class="toggle"><input id="toggle-force" type="checkbox"><span class="toggle-ui"></span><span>Force vectors</span></label>
+              <label class="toggle"><input id="toggle-grid" type="checkbox"><span class="toggle-ui"></span><span>Reference grid</span></label>
+              <label class="toggle"><input id="toggle-com" type="checkbox" checked><span class="toggle-ui"></span><span>Center of mass</span></label>
+              <label class="toggle"><input id="toggle-size" type="checkbox" checked><span class="toggle-ui"></span><span>Enlarge small bodies <em>not to scale</em></span></label>
+            </div>
+            <div class="trail-control">
+              <div class="range-heading"><label for="trail-length">Trail length</label><output id="trail-length-value">1.00 orbits</output></div>
+              <input id="trail-length" type="range" min="0.25" max="2" step="0.25" value="1" aria-label="Trail length in orbital periods">
+              <div class="range-limits"><span id="trail-min-label">¼ orbit</span><span id="trail-max-label">2 orbits</span></div>
+            </div>
+          </div>
+        </section>
+
+        <details class="equation-card">
+          <summary class="equation-header"><span class="equation-icon">ƒ</span><span class="section-label">THE PHYSICS</span><span class="equation-chevron">+</span></summary>
+          <div class="equation">F = <span>G m₁m₂</span><small>r²</small></div>
+          <div class="equation-small">
+            <span>a₁ = G m₂ (r₂ − r₁) / |r₂ − r₁|³</span>
+            <span>a₂ = G m₁ (r₁ − r₂) / |r₁ − r₂|³</span>
+          </div>
+          <p>Each body accelerates toward the other. Equal and opposite forces make both orbit their shared center of mass.</p>
+          <div class="equation-footer"><span>G</span> = 6.67430 × 10<sup>−11</sup> m³ kg⁻¹ s⁻²</div>
+        </details>
+      </aside>
+
+      <main class="workspace">
+        <section class="simulation-card" aria-label="Interactive orbital simulation">
+          <div class="scene-toolbar">
+            <div class="scene-title"><span class="eyebrow">LIVE SIMULATION</span><strong id="scenario-title">Sun — Earth</strong></div>
+            <div class="scene-toolbar-right">
+              <span class="orbit-status" id="orbit-status"><i></i><span>BOUND ORBIT</span></span>
+              <button class="button button-secondary scene-restart" id="scene-restart" type="button" aria-label="Restart simulation" title="Restart simulation">↺ <span>Restart simulation</span></button>
+              <div class="camera-controls">
+                <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+                <button id="zoom-readout" type="button" aria-label="Reset camera">100%</button>
+                <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+                <button id="camera-reset" class="camera-reset" type="button" title="Reset camera" aria-label="Reset camera">⌖ <span class="camera-reset-label">Reset camera</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="canvas-wrap" id="canvas-wrap">
+            <canvas id="simulation-canvas" aria-label="Canvas showing two bodies moving under gravity"></canvas>
+            <div class="presentation-hud" aria-label="Presentation simulation status">
+              <span>ELAPSED <strong id="presentation-elapsed">0.000 days</strong></span>
+              <span>SPEED <strong id="presentation-speed">100 days/s</strong></span>
+            </div>
+            <div class="scene-legend">
+              <span><i class="legend-dot legend-one"></i><b id="legend1">Body 1</b></span>
+              <span><i class="legend-dot legend-two"></i><b id="legend2">Body 2</b></span>
+              <span class="legend-com" id="legend-com"><i>⊕</i> CENTER OF MASS</span>
+              <span class="visual-scale-note" id="visual-scale-note">SIZE EXAGGERATED · NOT TO SCALE</span>
+            </div>
+            <div class="scene-hint"><span>DRAG TO PAN</span><i></i><span>SCROLL TO ZOOM</span></div>
+            <div class="collision-banner" id="collision-banner" hidden>COLLISION DETECTED <span>Simulation paused at estimated contact.</span></div>
+          </div>
+          <div class="simulation-footer">
+            <span><i class="footer-pulse"></i> VELOCITY VERLET INTEGRATOR</span>
+            <span id="frame-step">STEP 0.100 D</span>
+            <span>SI UNITS · AU DISPLAY</span>
+          </div>
+        </section>
+
+        <section class="learning-section">
+          <div class="learning-heading"><div><span class="eyebrow">A QUICK FIELD GUIDE</span><h2>Reading the orbit</h2></div><span class="learning-symbol" aria-hidden="true">↗</span></div>
+          <div class="learning-grid">
+            <article class="learning-card"><span class="learning-index">01 / MOTION</span><h3>Gravity shapes the path</h3><p>Newton's inverse-square law pulls both masses together. As each body accelerates, its velocity continually changes direction, producing an orbit rather than a straight line. With zero total momentum the center of mass stays fixed; otherwise it moves at constant velocity.</p></article>
+            <article class="learning-card"><span class="learning-index">02 / TRAJECTORY</span><h3>Bound or unbound?</h3><p>Negative relative orbital energy means a bound ellipse (a circle is a special case). Zero or positive relative energy gives a parabolic or hyperbolic escape path. Eccentricity <i>e</i> classifies the conic: <i>e</i> &lt; 1, = 1, or &gt; 1.</p></article>
+            <article class="learning-card"><span class="learning-index">03 / KEPLER</span><h3>Three laws, in motion</h3><p>Orbits are conic sections with the center of mass at a focus. Equal areas are swept in equal times because angular momentum is conserved. The period follows <i>T² ∝ a³</i>, with both masses included in this two-body model.</p></article>
+            <article class="learning-card numerical-note"><span class="learning-index">NUMERICAL NOTE</span><h3>Stable steps, safe contact</h3><p>Velocity Verlet advances both bodies with a fixed SI time step. There is no force softening; contact is detected using estimated spherical radii (Earth-like density for custom masses), then the simulation pauses before the inverse-square force becomes singular.</p></article>
+          </div>
+        </section>
+        <footer class="page-footer"><span>ORBITLAB / CLASSICAL MECHANICS</span><span>Two point masses · Newtonian gravity · No relativistic effects</span></footer>
+      </main>
+
+      <aside class="data-panel" id="data-panel" aria-label="Live telemetry and graphs">
+        <div class="data-panel-heading">
+          <div><span class="eyebrow">LIVE TELEMETRY</span><h2>System data</h2></div>
+          <button class="data-collapse" id="data-collapse" type="button" aria-expanded="true" aria-label="Collapse live telemetry panel" title="Collapse telemetry">›</button>
+        </div>
+        <section class="metrics-section" aria-label="Live simulation data">
+          <div class="metrics-heading">
+            <div><span class="eyebrow">TELEMETRY</span><h2>Orbital data</h2></div>
+          </div>
+          <div class="conservation-indicators">
+            <div class="energy-indicator" id="energy-indicator" title="Relative change in total mechanical energy">
+              <i></i><span>RELATIVE ENERGY ERROR</span><strong id="energy-error">0.0000%</strong>
+            </div>
+            <div class="energy-indicator" id="angular-momentum-indicator" title="Relative change in angular momentum">
+              <i></i><span>RELATIVE ANGULAR MOMENTUM ERROR</span><strong id="angular-momentum-error">0.0000%</strong>
+            </div>
+          </div>
+          <div class="metrics-grid">
+            <article class="metric-card metric-distance"><span class="metric-label">SEPARATION</span><strong id="distance-value">—</strong><small id="distance-unit">AU</small></article>
+            <article class="metric-card"><span class="metric-label" id="speed1-label">BODY 1 SPEED</span><strong id="speed1-value">—</strong><small>km/s</small></article>
+            <article class="metric-card"><span class="metric-label" id="speed2-label">BODY 2 SPEED</span><strong id="speed2-value">—</strong><small>km/s</small></article>
+            <article class="metric-card"><span class="metric-label">RELATIVE SPEED</span><strong id="relative-speed">—</strong><small>km/s</small></article>
+            <article class="metric-card"><span class="metric-label">KINETIC ENERGY</span><strong id="kinetic-energy">—</strong><small>J</small></article>
+            <article class="metric-card"><span class="metric-label">POTENTIAL ENERGY</span><strong id="potential-energy">—</strong><small>J</small></article>
+            <article class="metric-card"><span class="metric-label">TOTAL ENERGY</span><strong id="total-energy">—</strong><small>J</small></article>
+            <article class="metric-card"><span class="metric-label">ANGULAR MOMENTUM</span><strong id="angular-momentum">—</strong><small>kg·m²/s</small></article>
+            <article class="metric-card"><span class="metric-label">ECCENTRICITY</span><strong id="eccentricity">—</strong><small id="orbit-class">—</small></article>
+            <article class="metric-card"><span class="metric-label">ORBITAL PERIOD</span><strong id="period-value">—</strong><small id="period-unit">bound orbit</small></article>
+            <article class="metric-card metric-time"><span class="metric-label">ELAPSED SIMULATION TIME</span><strong id="elapsed-time">0.000</strong><small id="elapsed-unit">days</small></article>
+            <article class="metric-card"><span class="metric-label">CENTER OF MASS</span><strong id="com-value">—</strong><small>AU · x, y</small></article>
+            <article class="metric-card"><span class="metric-label">COM VELOCITY</span><strong id="com-velocity-value">—</strong><small>km/s · x, y</small></article>
+            <article class="metric-card"><span class="metric-label">SELECTED SPEED</span><strong id="selected-speed">100</strong><small>simulated days/s</small></article>
+            <article class="metric-card metric-achieved"><span class="metric-label">ACTUAL ACHIEVED SPEED</span><strong id="actual-speed">0</strong><small>simulated days/s</small></article>
+            <article class="metric-card"><span class="metric-label">REVOLUTIONS COMPLETED</span><strong id="completed-revolutions">0</strong><small id="revolution-progress">bound orbits only</small></article>
+          </div>
+        </section>
+
+        <section class="charts-section" aria-label="Live graphs">
+          <div class="charts-heading">
+            <div><span class="eyebrow">TIME SERIES</span><h2>System behavior</h2></div>
+            <span class="history-note"><i></i> LIVE · LAST 600 SAMPLES</span>
+          </div>
+          <div class="charts-grid">
+            <article class="chart-card"><div class="chart-title"><span>Separation</span><small>AU</small></div><div class="chart-area"><canvas id="distance-chart" aria-label="Separation versus time chart"></canvas></div></article>
+            <article class="chart-card"><div class="chart-title"><span>Energy</span><small>JOULES</small></div><div class="chart-area"><canvas id="energy-chart" aria-label="Energy versus time chart"></canvas></div></article>
+            <article class="chart-card"><div class="chart-title"><span>Orbital speed</span><small>KM/S</small></div><div class="chart-area"><canvas id="speed-chart" aria-label="Speed versus time chart"></canvas></div></article>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

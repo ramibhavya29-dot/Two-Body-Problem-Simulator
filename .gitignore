@@ -1,0 +1,39 @@
+# Operating-system clutter
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor and IDE clutter
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs and temporary output
+*.log
+logs/
+tmp/
+temp/
+.cache/
+
+# Environment and credential files
+.env
+.env.*
+!.env.example
+
+# Browser and test artifacts
+playwright-report/
+test-results/
+coverage/
+
+# Python cache, if an optional local server or tooling creates it
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Node tooling cache, if later added by the maintainer
+node_modules/
+.npm/
+
+# Office and archive temporary files
+~$*
+*.tmp
