@@ -2,7 +2,7 @@
 
 - **Course:** ME206
 - **Assignment:** Assignment 4
-- **GitHub repository URL:** Pending publication
+- **GitHub repository URL:** https://github.com/ramibhavya29-dot/Two-Body-Problem-Simulator
 - **Live simulation URL:** Not published
 - **YouTube demonstration link:** [PLACEHOLDER: Add final YouTube demonstration URL]
 

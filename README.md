@@ -347,15 +347,13 @@ This is expected if the bounded 8-ms physics budget or 2000-physics-step frame l
 
 ## Preparing a GitHub Repository
 
-The intended repository name is `Two-Body-Problem-Simulator`. After reviewing the staged files, create a public repository and push from the project directory:
+The public repository is available at [github.com/ramibhavya29-dot/Two-Body-Problem-Simulator](https://github.com/ramibhavya29-dot/Two-Body-Problem-Simulator).
+
+To obtain a local copy:
 
 ```bash
-git init
-git add .
-git commit -m "Prepare ME206 Assignment 4 simulator submission"
-git branch -M main
-git remote add origin https://github.com/<GITHUB-USERNAME>/Two-Body-Problem-Simulator.git
-git push -u origin main
+git clone https://github.com/ramibhavya29-dot/Two-Body-Problem-Simulator.git
+cd Two-Body-Problem-Simulator
 ```
 
-Replace `<GITHUB-USERNAME>` with the confirmed GitHub account name. Public GitHub Pages hosting can then be enabled from the repository **Settings → Pages** if desired, selecting the `main` branch and the repository root.
+The cloned repository is ready to run using the VS Code Live Server instructions above. A live hosted simulator URL is not currently configured. If desired, GitHub Pages can be enabled from repository **Settings → Pages**, selecting the `main` branch and repository root.
