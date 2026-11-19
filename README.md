@@ -1,7 +1,35 @@
 # Interactive Two-Body Problem Simulator
 
-**Course:** ME206
-**Assignment:** Assignment 4
+> An interactive browser simulation of Newtonian two-body motion, with barycentric visualization and live physical analysis.
+
+| | |
+|---|---|
+| **Course** | ME206 |
+| **Assignment** | Assignment 4 |
+| **Repository** | [Two-Body-Problem-Simulator](https://github.com/ramibhavya29-dot/Two-Body-Problem-Simulator) |
+
+## Contents
+
+- [Project Overview](#project-overview)
+- [Physical Model](#physical-model)
+  - [Newton's Law of Universal Gravitation](#newtons-law-of-universal-gravitation)
+  - [Equations of Motion](#equations-of-motion)
+  - [Center of Mass](#center-of-mass)
+- [Numerical Method](#numerical-method)
+- [Mechanical Quantities](#mechanical-quantities)
+- [Main Features](#main-features)
+- [Interactive Controls](#interactive-controls)
+- [Orbital Presets](#orbital-presets)
+- [Technologies and Dependencies](#technologies-and-dependencies)
+- [Project File Structure](#project-file-structure)
+- [Software Requirements](#software-requirements)
+- [Installation and Execution](#installation-and-execution)
+- [How to Use the Simulator](#how-to-use-the-simulator)
+- [Known Limitations](#known-limitations)
+- [Troubleshooting](#troubleshooting)
+- [GitHub Repository](#github-repository)
+
+---
 
 ## Project Overview
 
@@ -191,14 +219,16 @@ Enter mass in Earth-mass units, position in AU, and velocity in km/s. The initia
 
 ### Simulation Controls
 
-- **Play/Pause** controls the real-time physics loop.
-- **Restart** restarts with the current parameter fields.
-- **Reset** restores the currently selected preset.
-- **Reset camera** clears pan and zoom and restores automatic framing.
-- **Time step** changes the fixed physics substep from 0.005 to 1 simulated day.
-- **Speed preset**, **speed slider**, and **custom speed** set 1–10,000 simulated days per real second.
-- **Cinematic orbit** sets a 365-day-per-second presentation rate and restores the prior speed when disabled.
-- **Trail length** changes the retained bound-orbit fraction or unbound time window.
+| Control | Effect |
+|---|---|
+| **Play/Pause** | Starts or pauses the simulation. |
+| **Restart** | Restarts using the current parameter fields. |
+| **Reset** | Restores the currently selected preset. |
+| **Reset camera** | Clears pan and zoom and restores automatic framing. |
+| **Time step** | Sets the fixed physics substep from 0.005 to 1 simulated day. |
+| **Speed controls** | Select or enter a rate from 1 to 10,000 simulated days per real second. |
+| **Cinematic orbit** | Sets a 365-day-per-second presentation rate and restores the prior speed when disabled. |
+| **Trail length** | Adjusts the retained bound-orbit fraction or unbound time window. |
 
 ### Display Controls
 
@@ -215,15 +245,15 @@ The body-size option is explicitly labeled **not to scale**.
 
 ## Orbital Presets
 
-| Preset | Description |
+| Preset | Initial conditions |
 |---|---|
-| Equal-mass binary stars | Default 1.2-AU equal-solar-mass system with opposite barycentric velocities |
-| Ideal circular equal-mass binary | Mathematically circular equal-mass binary configuration |
-| Sun–Earth | Scientifically meaningful near-circular Sun–Earth initial conditions |
-| Earth–Moon | Earth–Moon barycentric initial conditions |
-| Elliptical orbit | Eccentric bound orbit initialized at periapsis |
-| Near-circular orbit | Near-circular bound two-body orbit |
-| Escape trajectory | Hyperbolic flyby with positive relative orbital energy |
+| Equal-mass binary stars | Default 1.2-AU equal-solar-mass system with opposite barycentric velocities. |
+| Ideal circular equal-mass binary | Mathematically circular equal-mass binary configuration. |
+| Sun–Earth | Near-circular Sun–Earth initial conditions. |
+| Earth–Moon | Earth–Moon barycentric initial conditions. |
+| Elliptical orbit | Eccentric bound orbit initialized at periapsis. |
+| Near-circular orbit | Near-circular bound two-body orbit. |
+| Escape trajectory | Hyperbolic flyby with positive relative orbital energy. |
 
 ## Technologies and Dependencies
 
@@ -236,11 +266,12 @@ The body-size option is explicitly labeled **not to scale**.
 - `requestAnimationFrame`
 - Velocity Verlet numerical integration
 
-### Actual External Dependencies
+### External Dependencies
 
-- **Chart.js 4.4.4**, loaded from jsDelivr:
-  `https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js`
-- **Google Fonts**, loaded for optional DM Sans, DM Mono, and Space Grotesk typefaces.
+| Dependency | Version or source | Purpose |
+|---|---|---|
+| **Chart.js** | 4.4.4 · [jsDelivr CDN](https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js) | Live time-series graphs. |
+| **Google Fonts** | [Google Fonts CSS](https://fonts.googleapis.com/) | Optional DM Sans, DM Mono, and Space Grotesk typefaces. |
 
 The project has no backend, build step, package manifest, package installation requirement, or local asset dependency. Chart.js is required for live graphs; without network access to jsDelivr, the simulator displays a fallback graph-message area and the rest of the application remains usable. Google Fonts are optional visual enhancements.
 
@@ -345,7 +376,7 @@ The selected initial separation or a later close approach may place the estimate
 
 This is expected if the bounded 8-ms physics budget or 2000-physics-step frame limit is reached. Reduce the requested speed or increase the fixed time step only when its numerical accuracy is acceptable. The physics loop does not discard unprocessed time.
 
-## Preparing a GitHub Repository
+## GitHub Repository
 
 The public repository is available at [github.com/ramibhavya29-dot/Two-Body-Problem-Simulator](https://github.com/ramibhavya29-dot/Two-Body-Problem-Simulator).
 
